@@ -10,15 +10,15 @@ import coil.load
 import me.bkkn.myfirstmaterialapp.domain.NasaRepositoryImpl
 import me.bkkn.poplibapp1.R
 import me.bkkn.poplibapp1.databinding.FragmentMainBinding
-
 class MainFragment : Fragment(R.layout.fragment_main) {
 
-    private val viewModel: MainViewModel by viewModels() {
+    private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(NasaRepositoryImpl())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         if (savedInstanceState == null) {
             viewModel.requestPictureOfTheDay()
         }
@@ -45,6 +45,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             viewModel.image.collect { url ->
                 url?.let {
                     binding.img.load(it)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
+            viewModel.title.collect { title ->
+                title?.let {
+                    binding.bottomSheetLayout.bottomSheetDescriptionHeader.text = it
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
+            viewModel.explanation.collect { expl ->
+                expl?.let {
+                    binding.bottomSheetLayout.bottomSheetExplanation.text = it
                 }
             }
         }

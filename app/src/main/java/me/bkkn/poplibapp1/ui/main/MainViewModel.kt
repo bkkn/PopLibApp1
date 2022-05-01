@@ -17,6 +17,12 @@ class MainViewModel(private val repository: NasaRepository) : ViewModel() {
     private val _image: MutableStateFlow<String?> = MutableStateFlow(null)
     val image: Flow<String?> = _image
 
+    private val _explanation: MutableStateFlow<String?> = MutableStateFlow(null)
+    val explanation: Flow<String?> = _explanation
+
+    private val _title: MutableStateFlow<String?> = MutableStateFlow(null)
+    val title: Flow<String?> = _title
+
     private val _error: MutableSharedFlow<String> = MutableSharedFlow()
     val error: Flow<String> = _error
 
@@ -28,6 +34,10 @@ class MainViewModel(private val repository: NasaRepository) : ViewModel() {
             try {
                 val url = repository.pictureOfTheDay().url
                 _image.emit(url)
+                val title = repository.pictureOfTheDay().title
+                _title.emit(title)
+                val expl = repository.pictureOfTheDay().explanation
+                _explanation.emit(expl)
             } catch (e: IOException) {
                 _error.emit("Network error")
             }
