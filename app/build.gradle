@@ -33,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def apiKey  = properties.getProperty("nasa_api_key", "")
+        it.buildConfigField "String", "NASA_API_KEY", apiKey
+    }
 }
 
 dependencies {
