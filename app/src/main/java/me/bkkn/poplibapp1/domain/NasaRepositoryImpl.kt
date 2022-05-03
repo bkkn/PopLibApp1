@@ -27,4 +27,7 @@ class NasaRepositoryImpl : NasaRepository {
 
     override suspend fun pictureOfTheDay(): PictureOfTheDayResponse =
         api.pictureOfTheDay(BuildConfig.NASA_API_KEY)
+
+    override suspend fun pictureByDate(date: String): PictureOfTheDayResponse =
+        api.pictureByDate(BuildConfig.NASA_API_KEY,date)
 }
