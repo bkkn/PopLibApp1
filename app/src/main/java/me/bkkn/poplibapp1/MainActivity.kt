@@ -1,18 +1,27 @@
 package me.bkkn.poplibapp1
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import me.bkkn.poplibapp1.ui.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
+    private val sharedPreferencesKey = "shared preferences key"
+    private val themeKey = "theme key"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(getCurrentTheme())
         setContentView(R.layout.main_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
-        }
+    }
+
+    fun getCurrentTheme(): Int {
+        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, MODE_PRIVATE)
+        return sharedPreferences.getInt(themeKey, -1)
+    }
+
+    fun setCurrentTheme(currentTheme: Int) {
+        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, MODE_PRIVATE)
+        sharedPreferences.edit().putInt(themeKey, currentTheme).apply()
+        recreate()
     }
 }
