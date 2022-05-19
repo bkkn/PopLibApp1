@@ -3,4 +3,6 @@
     <string name="_2_days_ago">2 days ago</string>
     <string name="yesterday">Yesterday</string>
     <string name="today">Today</string>
+    <string name="martian_theme">Martian Theme</string>
+    <string name="earthian_theme">Earthian Theme</string>
 </resources>

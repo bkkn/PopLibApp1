@@ -1,4 +1,40 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Marsian" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#E57373</item>
+        <item name="colorPrimaryVariant">#FF8A65</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#FFB74D</item>
+        <item name="colorSecondaryVariant">#FFD54F</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">#FF3D00</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/Header.Small</item>
+        <item name="headerColorMain">@color/martian_main</item>
+        <item name="headerColorSecondary">@color/martian_secondary</item>
+    </style>
+
+    <style name="Theme.Earthian" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryVariant">#03A9F4</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#64B5F6</item>
+        <item name="colorSecondaryVariant">#7986CB</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">#00B0FF</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">#1A237E</item>
+
+        <item name="headerColorMain">@color/teal_200</item>
+        <item name="headerColorSecondary">@color/purple_700</item>
+
+    </style>
     <!-- Base application theme. -->
     <style name="Theme.PopLibApp1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
@@ -12,5 +48,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+<!--        <item name="android:textViewStyle">@style/Header.Medium</item>-->
+
     </style>
 </resources>

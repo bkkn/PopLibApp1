@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Header">
+        <item name="android:textColor">?attr/headerColorMain</item>
+    </style>
+
+    <style name="Header.Small">
+        <item name="android:textSize">@dimen/small_header_text_size</item>
+    </style>
+
+    <style name="Header.Medium">
+        <item name="android:textSize">@dimen/medium_header_text_size</item>
+    </style>
+</resources>
