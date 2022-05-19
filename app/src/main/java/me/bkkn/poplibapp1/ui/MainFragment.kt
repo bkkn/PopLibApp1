@@ -6,13 +6,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
+import coil.ImageLoader
+import coil.decode.VideoFrameDecoder
 import coil.load
+import coil.request.videoFrameMillis
 import kotlinx.coroutines.launch
 import me.bkkn.myfirstmaterialapp.domain.NasaRepositoryImpl
 import me.bkkn.poplibapp1.Const.bottom_sheet_tag
 import me.bkkn.poplibapp1.Const.wiki_request_key
+import me.bkkn.poplibapp1.MainActivity
 import me.bkkn.poplibapp1.R
 import me.bkkn.poplibapp1.databinding.FragmentMainBinding
 
@@ -27,7 +32,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            viewModel.requestPictureOfTheDay()
+            viewModel.requestPictureByDate(0)
         }
     }
 
@@ -49,28 +54,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             )
         }
 
-        binding.todayChip.setOnClickListener({ viewModel.requestPictureOfTheDay() })
-        binding.yesterdayChip.setOnClickListener({ viewModel.requestPictureByDate(1)})
-        binding.twoDaysChip.setOnClickListener({viewModel.requestPictureByDate(2)})
+        binding.todayChip.setOnClickListener({ viewModel.requestPictureByDate(0) })
+        binding.yesterdayChip.setOnClickListener({ viewModel.requestPictureByDate(1) })
+        binding.twoDaysChip.setOnClickListener({ viewModel.requestPictureByDate(6) })
 
-//        binding.group.setOnClickListener {it->
-//            when (it.id){
-//                binding.twoDaysChip.id -> viewModel.requestPictureByDate(2)
-//                binding.yesterdayChip.id -> viewModel.requestPictureByDate(1)
-//                binding.todayChip.id -> viewModel.requestPictureOfTheDay()
-//            }
-//        }
-//        setOnCheckedChangeListener { group, checkedId ->
-//            if (checkedId == 1){
-//                viewModel.requestPictureByDate(2)
-//            }
-//            if (checkedId == 2){
-//                viewModel.requestPictureByDate(1)
-//            }
-//            if (checkedId == 3){
-//                viewModel.requestPictureOfTheDay()
-//            }
-//        }
+        binding.martianThemeChip.setOnClickListener({(requireActivity() as MainActivity).setCurrentTheme(R.style.Theme_Marsian)})
+        binding.earthianThemeChip.setOnClickListener({(requireActivity() as MainActivity).setCurrentTheme(R.style.Theme_Earthian)})
 
         viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
             viewModel.loading.collect {
@@ -84,26 +73,43 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
-        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
-            viewModel.image.collect { url ->
-                url?.let {
-                    binding.img.load(it)
-                }
-            }
-        }
+        viewLifecycleOwner.lifecycle.coroutineScope.launch {
+            viewModel.response.collect { response ->
+                response?.let {
 
-        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
-            viewModel.title.collect { title ->
-                title?.let {
-                    binding.bottomSheetLayout.bottomSheetDescriptionHeader.text = it
-                }
-            }
-        }
 
-        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenStarted {
-            viewModel.explanation.collect { expl ->
-                expl?.let {
-                    binding.bottomSheetLayout.bottomSheetExplanation.text = it
+
+                    if(response.mediaType == "video"){
+
+                        val url = response.url
+//                        val videoId = url.split("v=")[1]; //for this, the extracted id is "en7IK3iH3wI"
+//
+//                        val tempThumbnailDefault = "http://img.youtube.com/vi/"+videoId+"/default.jpg" //default quality thumbnail
+//                        val tempThumbnailStandard = "http://img.youtube.com/vi/"+videoId+"/sddefault.jpg"
+////standard thumbnail
+//                        val tempThumbnailInMaxRes = "http://img.youtube.com/vi/"+videoId+"/maxresdefault.jpg"
+////maximum resolution thumbnail
+//                        val tempThumbnailInMQ = "http://img.youtube.com/vi/"+videoId+"/mqdefault.jpg" //medium quality thumbnail
+//                        val tempThumbnailInHQ = "http://img.youtube.com/vi/"+videoId+"/hqdefault.jpg"
+//high quality thumbnail
+val default = "https://img.youtube.com/vi/%22+aKK7vS2CHC8+%22/default.jpg"
+
+                        val imageLoader = ImageLoader.Builder(requireContext())
+                            .components {
+                                add(VideoFrameDecoder.Factory())
+                            }
+                            .build()
+
+                        binding.img.load(imageLoader)
+//                        binding.img.load(default) {
+//                            videoFrameMillis(1000)
+//                        }
+                    } else{
+                         binding.img.load(response.url)
+                    }
+
+                    binding.bottomSheetLayout.bottomSheetDescriptionHeader.text = response.title
+                    binding.bottomSheetLayout.bottomSheetExplanation.text = response.explanation
                 }
             }
         }
